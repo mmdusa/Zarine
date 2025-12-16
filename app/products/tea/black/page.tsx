@@ -12,7 +12,6 @@ export default function BlackTeaPage() {
 
   return (
     <main className="min-h-screen bg-[radial-gradient(60%_70%_at_50%_0%,#2a1510_0%,#120b09_55%,#0b0807_100%)] text-white">
-      {/* ⭐ Breadcrumb */}
       <section className="max-w-6xl mx-auto px-6 pt-20 pb-6">
         <nav className="mb-6 text-sm text-white/70 flex flex-wrap gap-2">
           <Link href="/" className="hover:text-[#FFD700]">
@@ -32,7 +31,6 @@ export default function BlackTeaPage() {
         </p>
       </section>
 
-      {/* ⭐ Grid */}
       <section className="max-w-6xl mx-auto px-6 pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
           {items.map((t) => (
@@ -40,7 +38,7 @@ export default function BlackTeaPage() {
               key={t.slug}
               href={`/products/tea/black/${t.slug}`}
               image={t.img}
-              title={t.title}          {/* ✅ FIX HERE */}
+              title={t.title}
               brand={t.brand ?? "ZARINÉ"}
               blurb={t.short}
               price={t.price}
