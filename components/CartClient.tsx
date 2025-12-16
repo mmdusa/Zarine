@@ -1,4 +1,3 @@
-// components/CartClient.tsx
 "use client";
 
 import Image from "next/image";
@@ -6,20 +5,27 @@ import Link from "next/link";
 import { useCallback } from "react";
 import { useCart } from "@/lib/stores/useCart";
 
+/* ✅ Explicit cart item type (matches your store) */
+type CartItem = {
+  id: string;
+  title: string;
+  price: number;
+  qty: number;
+  img?: string;
+  meta?: string;
+};
+
 export default function CartClient() {
-  // subscribe to exactly what we need (safer & less chance of stale values)
-  const items = useCart((s) => s.items);
+  const items = useCart((s) => s.items) as CartItem[];
   const add = useCart((s) => s.add);
   const remove = useCart((s) => s.remove);
   const clear = useCart((s) => s.clear);
 
-  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
-  // helper used by "+" button — uses object form
+  /* ✅ Typed increment */
   const handleIncrement = useCallback(
-    (item) => {
-      console.log("[CartClient] + clicked for:", item.id, item);
-      // call object form to be resilient to parameter mismatches
+    (item: CartItem) => {
       add(
         {
           id: item.id,
@@ -30,18 +36,14 @@ export default function CartClient() {
         },
         1
       );
-      console.log("[CartClient] add() called (object form)");
-      console.log("[CartClient] store items after add (optimistic):", useCart.getState().items);
     },
     [add]
   );
 
+  /* ✅ Typed decrement */
   const handleDecrement = useCallback(
-    (id) => {
-      console.log("[CartClient] - clicked for:", id);
+    (id: string) => {
       remove(id);
-      console.log("[CartClient] remove() called");
-      console.log("[CartClient] store items after remove (optimistic):", useCart.getState().items);
     },
     [remove]
   );
@@ -69,23 +71,24 @@ export default function CartClient() {
         {items.map((i) => (
           <li key={i.id} className="flex flex-col sm:flex-row sm:items-center gap-4 py-6">
             {/* Image */}
-            {i.img ? (
+            {i.img && (
               <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-white/5 border border-white/10">
                 <Image src={i.img} alt={i.title} fill className="object-cover" />
               </div>
-            ) : null}
+            )}
 
             {/* Info */}
             <div className="flex-1 space-y-1">
               <div className="font-medium text-lg">{i.title}</div>
               {i.meta && <div className="text-xs text-white/50">{i.meta}</div>}
-              <div className="text-sm text-white/70">Unit: €{i.price.toFixed(2)}</div>
+              <div className="text-sm text-white/70">
+                Unit: €{i.price.toFixed(2)}
+              </div>
             </div>
 
-            {/* Quantity Controls */}
+            {/* Quantity */}
             <div className="flex items-center gap-6 mt-2 sm:mt-0">
               <div className="flex items-center rounded-lg border border-white/20 bg-white/5">
-                {/* DECREMENT */}
                 <button
                   onClick={() => handleDecrement(i.id)}
                   className="w-8 h-8 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition"
@@ -94,9 +97,10 @@ export default function CartClient() {
                   −
                 </button>
 
-                <div className="w-8 text-center text-sm font-medium">{i.qty}</div>
+                <div className="w-8 text-center text-sm font-medium">
+                  {i.qty}
+                </div>
 
-                {/* INCREMENT — robust object form */}
                 <button
                   onClick={() => handleIncrement(i)}
                   className="w-8 h-8 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition"
@@ -109,7 +113,9 @@ export default function CartClient() {
               {/* Subtotal */}
               <div className="text-right min-w-[80px]">
                 <div className="text-sm text-white/50">Total</div>
-                <div className="font-semibold text-[#FFD700]">€{(i.price * i.qty).toFixed(2)}</div>
+                <div className="font-semibold text-[#FFD700]">
+                  €{(i.price * i.qty).toFixed(2)}
+                </div>
               </div>
             </div>
           </li>
@@ -117,19 +123,33 @@ export default function CartClient() {
       </ul>
 
       <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-6">
-        <button onClick={() => { console.log("[CartClient] clear()"); clear(); }} className="text-sm text-white/50 hover:text-white transition">
+        <button
+          onClick={() => clear()}
+          className="text-sm text-white/50 hover:text-white transition"
+        >
           Clear cart
         </button>
+
         <div className="text-xl">
-          Total: <span className="text-[#FFD700] font-bold">€{total.toFixed(2)}</span>
+          Total:{" "}
+          <span className="text-[#FFD700] font-bold">
+            €{total.toFixed(2)}
+          </span>
         </div>
       </div>
 
       <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-end">
-        <Link href="/products/saffron" className="text-center rounded-full border border-white/20 px-6 py-3 text-sm hover:bg-white/10 transition">
+        <Link
+          href="/products/saffron"
+          className="text-center rounded-full border border-white/20 px-6 py-3 text-sm hover:bg-white/10 transition"
+        >
           Continue shopping
         </Link>
-        <Link href="/checkout" className="text-center rounded-full bg-[#D4AF37] text-black px-8 py-3 text-sm font-bold hover:brightness-110 shadow-lg shadow-[#D4AF37]/20 transition">
+
+        <Link
+          href="/checkout"
+          className="text-center rounded-full bg-[#D4AF37] text-black px-8 py-3 text-sm font-bold hover:brightness-110 shadow-lg shadow-[#D4AF37]/20 transition"
+        >
           Checkout
         </Link>
       </div>
