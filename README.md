@@ -1,2 +1,0 @@
-# Zarine
-Zarine project
