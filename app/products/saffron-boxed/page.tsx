@@ -14,8 +14,7 @@ export default function SaffronBoxedPage() {
         </h1>
         <p className="mt-4 text-white/85 max-w-3xl">
           Gift-ready Persian saffron in elegant presentation boxes — perfect for
-          celebrations, hospitality and special occasions. Tap a box to see full
-          details, price and tasting notes.
+          celebrations, hospitality and special occasions.
         </p>
       </section>
 
@@ -28,7 +27,7 @@ export default function SaffronBoxedPage() {
               href={`/products/saffron-boxed/${p.id}`}
               image={p.images[0]}
               title={p.title}
-              brand="Bahraman"          {/* ✅ FIXED: hard-coded */}
+              brand="Bahraman"
               blurb={p.short}
               price={p.price}
               weightLabel={p.weight}
