@@ -10,10 +10,9 @@ type Props = {
 };
 
 export default function TeaDetailPage({ params }: Props) {
-  // ✅ Next.js 15: params MUST be unwrapped
+  // Next.js 15: unwrap params
   const { slug } = use(params);
 
-  // Find tea by slug
   const tea: BlackTea | undefined = BLACK_TEA.find(
     (t) => t.slug === slug
   );
@@ -22,5 +21,6 @@ export default function TeaDetailPage({ params }: Props) {
     notFound();
   }
 
-  return <ClientTeaDetail t={tea} />;
+  // ✅ FIX: correct prop name
+  return <ClientTeaDetail tea={tea} />;
 }
