@@ -2,8 +2,6 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
 const calculateOrderAmount = (items: any[]) => {
   const total = items.reduce(
     (acc: number, item: any) => acc + item.price * item.qty,
@@ -14,6 +12,19 @@ const calculateOrderAmount = (items: any[]) => {
 
 export async function POST(request: Request) {
   try {
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+
+    // ✅ Prevent build-time crash on Netlify
+    if (!secretKey) {
+      return NextResponse.json(
+        { error: "Stripe secret key not configured" },
+        { status: 500 }
+      );
+    }
+
+    // ✅ Stripe is created ONLY at runtime
+    const stripe = new Stripe(secretKey);
+
     const { items } = await request.json();
 
     const paymentIntent = await stripe.paymentIntents.create({
