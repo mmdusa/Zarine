@@ -1,10 +1,15 @@
 "use client";
 
-import { useCart } from "@/lib/stores/useCart";
 import { useState } from "react";
+import { useCart } from "@/lib/stores/useCart";
+import type { BlackTea } from "@/app/data/blackTea";
 
-export default function AddToCart({ tea }) {
-  const add = useCart(s => s.add);
+type Props = {
+  tea: BlackTea;
+};
+
+export default function AddToCart({ tea }: Props) {
+  const add = useCart((s) => s.add);
   const [added, setAdded] = useState(false);
 
   const handleAdd = () => {
@@ -13,7 +18,9 @@ export default function AddToCart({ tea }) {
       tea.title,
       Number(tea.price),
       tea.img,
-      `${tea.weight} • ${tea.flavor ?? ""} • ${tea.origin ?? ""}`
+      `${tea.weight}${tea.flavor ? ` • ${tea.flavor}` : ""}${
+        tea.origin ? ` • ${tea.origin}` : ""
+      }`
     );
 
     setAdded(true);
