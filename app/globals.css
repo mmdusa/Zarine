@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { height: 100%; }
+}
+html, body { height: 100%; }
+body {
+  background: radial-gradient(circle at 50% 10%, #2d1a14 0%, #1a0f0b 70%);
+  color: #fff;
+}
+html { scroll-behavior: smooth; }
+
+/* 👇 Apply to <body class="site-bg"> from RootLayout */
+.site-bg{
+  /* Typography + min height */
+  font-family: Inter, system-ui, sans-serif;
+  color: #FFF5EC;             /* brand-cream */
+  min-height: 100vh;
+
+  /* Red theme + your image (no boteh layer) */
+  background-color: hwb(4 1% 80% / 0.533);  /* brand-crimson fallback */
+  background-image:
+    linear-gradient(rgba(160,34,34,0.32), rgba(63, 3, 3, 0.32)),
+    url("/backgrounds/boteh-user.png"); /* your image file */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Optional: card surface for readability on rich bg */
+.card-surface { @apply bg-brand-cream/90 text-brand-ink rounded-2xl; }
+
+
+@media (max-width: 640px){
+  .site-bg{
+    background-attachment: scroll, scroll, scroll; /* smoother on mobile */
+    background-size: auto, 220px 220px, cover;
+  }
+}
+/* --- Ornate product frame --- */
+@layer utilities {
+  .ornate-card {
+    position: relative;
+    border: 12px solid transparent;                /* outer frame thickness */
+    border-image-source: url('/images/persian-border.jpg'); /* your rug strip */
+    border-image-slice: 30;
+    border-image-repeat: round;
+    border-radius: 18px;
+    background:
+      radial-gradient(1200px 400px at 50% 0%,
+        rgba(212,175,55,.07) 0%,
+        rgba(0,0,0,.0) 50%) ,
+      #0b0b0b;                                     /* rich dark surface */
+    box-shadow:
+      0 18px 60px rgba(0,0,0,.45),
+      inset 0 0 0 1px rgba(212,175,55,.25);        /* inner gold hairline */
+    transition: transform .35s ease, box-shadow .35s ease;
+  }
+  .ornate-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 24px 70px rgba(0,0,0,.55),
+      inset 0 0 0 1px rgba(212,175,55,.35);
+  }
+  .ornate-card::before {
+    /* diagonal golden sheen */
+    content: "";
+    position: absolute; inset: 0; pointer-events: none; border-radius: 10px;
+    background: linear-gradient(120deg,
+      rgba(212,175,55,.18) 0%,
+      rgba(212,175,55,0) 30%,
+      rgba(212,175,55,0) 70%,
+      rgba(212,175,55,.12) 100%);
+    opacity: 0; transition: opacity .35s ease;
+  }
+  .ornate-card:hover::before { opacity: .9; }
+
+  .ornate-title { font-family: var(--font-cinzel, serif); letter-spacing: .4px; }
+  .gold-link { color: #D4AF37; display: inline-flex; align-items: center; gap: .5rem; }
+  .gold-link:hover { text-decoration: underline; }
+}
+@layer utilities {
+  /* --- Elegant floating product card --- */
+  .lux-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: radial-gradient(circle at top, rgba(30, 30, 30, 0.95), rgba(0, 0, 0, 1));
+    box-shadow:
+      0 6px 25px rgba(0, 0, 0, 0.7),
+      inset 0 0 0 0.6px rgba(212, 175, 55, 0.4);
+    transition: all 0.4s ease;
+  }
+
+  .lux-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      0 14px 40px rgba(0, 0, 0, 0.8),
+      0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  /* soft light sweep when hovering */
+  .lux-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      rgba(212, 175, 55, 0.2) 0%,
+      rgba(255, 255, 255, 0.1) 25%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .lux-card:hover::before {
+    opacity: 1;
+  }
+
+  .lux-title {
+    font-family: var(--font-cinzel, serif);
+    color: #d4af37;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .lux-text {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .lux-link {
+    color: #d4af37;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.3s ease;
+  }
+  .lux-link:hover {
+    color: #f5d976;
+    text-decoration: underline;
+  }
+}
+@layer utilities {
+  .lux-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: radial-gradient(circle at top, rgba(30,30,30,.95), #000);
+    box-shadow: 0 6px 25px rgba(0,0,0,.7), inset 0 0 0 .6px rgba(212,175,55,.4);
+    transition: all .4s ease;
+  }
+  .lux-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(0,0,0,.8), 0 0 12px rgba(212,175,55,.3);
+  }
+
+  /* ⬇️ THIS is the important change */
+  .lux-card::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(120deg, rgba(212,175,55,.2) 0%, rgba(255,255,255,.1) 25%, rgba(0,0,0,0) 100%);
+    opacity: 0; transition: opacity .5s ease;
+    pointer-events: none;   /* ✅ allow clicks to pass through */
+  }
+  .lux-card:hover::before { opacity: 1; }
+}
+
