@@ -6,7 +6,8 @@ import ProductCard from "@/components/shop/ProductCard";
 export default function SaffronBoxedPage() {
   return (
     <main className="min-h-screen bg-[radial-gradient(60%_70%_at_50%_0%,#2a1510_0%,#120b09_55%,#0b0807_100%)] text-white">
-      {/* Header – same style as Loose Saffron */}
+      
+      {/* Header */}
       <section className="max-w-6xl mx-auto px-6 pt-20 pb-6">
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-[#FFD700] drop-shadow-[0_10px_30px_rgba(212,175,55,.25)]">
           Boxed Saffron Collection
@@ -18,7 +19,7 @@ export default function SaffronBoxedPage() {
         </p>
       </section>
 
-      {/* Grid – uses EXACT same card as Loose Saffron */}
+      {/* Grid */}
       <section className="max-w-6xl mx-auto px-6 pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
           {BOXED_PRODUCTS.map((p) => (
@@ -27,7 +28,7 @@ export default function SaffronBoxedPage() {
               href={`/products/saffron-boxed/${p.id}`}
               image={p.images[0]}
               title={p.title}
-              brand={p.brand ?? "Bahraman"}
+              brand="Bahraman"          {/* ✅ FIXED: hard-coded */}
               blurb={p.short}
               price={p.price}
               weightLabel={p.weight}
