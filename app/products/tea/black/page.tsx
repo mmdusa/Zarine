@@ -42,7 +42,7 @@ export default function BlackTeaPage() {
               image={t.img}
               title={t.title}
               brand="ZARINÉ"
-              blurb={t.short}
+              blurb={t.description}   {/* ✅ FIX: this field EXISTS */}
               price={t.price}
               weightLabel={t.weight}
             />
