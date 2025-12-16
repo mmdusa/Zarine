@@ -32,7 +32,7 @@ export default function BlackTeaPage() {
         </p>
       </section>
 
-      {/* ⭐ Grid using SAME card as Loose Saffron */}
+      {/* ⭐ Grid */}
       <section className="max-w-6xl mx-auto px-6 pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
           {items.map((t) => (
@@ -40,7 +40,7 @@ export default function BlackTeaPage() {
               key={t.slug}
               href={`/products/tea/black/${t.slug}`}
               image={t.img}
-              title={t.name}
+              title={t.title}          {/* ✅ FIX HERE */}
               brand={t.brand ?? "ZARINÉ"}
               blurb={t.short}
               price={t.price}
