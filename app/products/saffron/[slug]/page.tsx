@@ -1,12 +1,20 @@
+"use client";
+
+import { use } from "react";
 import { LOOSE_SAFFRON, type LooseProduct } from "@/app/data/Saffronloose";
 import ClientDetail from "./ClientDetail";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
-type Props = { params: { slug: string } };
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
 export default function LooseSaffronDetailPage({ params }: Props) {
+  // ✅ REQUIRED IN NEXT.JS 15
+  const { slug } = use(params);
+
   const product: LooseProduct | undefined = LOOSE_SAFFRON.find(
-    (p) => p.id === params.slug
+    (p) => p.id === slug
   );
 
   if (!product) {
