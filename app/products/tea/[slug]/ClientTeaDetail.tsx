@@ -15,5 +15,6 @@ export default function BlackTeaDetailPage({ params }: Props) {
     notFound();
   }
 
-  return <ClientTeaDetail t={tea} />;
+  // ✅ FIX: use the correct prop name
+  return <ClientTeaDetail tea={tea} />;
 }
