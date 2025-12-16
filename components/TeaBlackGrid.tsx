@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "@/app/providers"; // or "@/lib/stores/useCart" if that's your store
+import { useCart } from "@/lib/stores/useCart"; // ✅ FIXED IMPORT
 
 type TeaItem = {
   slug: string;
@@ -25,20 +25,22 @@ const TEAS: TeaItem[] = [
 ];
 
 export default function TeaBlackGrid() {
-  const { add } = useCart(); // ✅ hook only used in client file
+  // ✅ correct selector-based usage
+  const add = useCart((s) => s.add);
 
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <h1 className="text-3xl sm:text-4xl font-extrabold text-[#D4AF37] mb-2">
         Black Tea
       </h1>
-      <p className="text-white/80 mb-6">Click a card to view details or use “Add to cart”.</p>
+      <p className="text-white/80 mb-6">
+        Click a card to view details or use “Add to cart”.
+      </p>
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {TEAS.map((t) => (
           <li key={t.slug} className="group">
             <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#0f0b0a]">
-              {/* Make the whole visual area clickable to the detail page */}
               <Link href={`/products/tea/black/${t.slug}`} className="block relative">
                 <div className="aspect-[4/3] relative">
                   <Image
@@ -51,7 +53,9 @@ export default function TeaBlackGrid() {
                 </div>
                 <div className="px-4 pb-3">
                   <h3 className="text-lg font-semibold">{t.title}</h3>
-                  {t.subtitle && <p className="text-white/70 text-sm mt-1">{t.subtitle}</p>}
+                  {t.subtitle && (
+                    <p className="text-white/70 text-sm mt-1">{t.subtitle}</p>
+                  )}
                 </div>
               </Link>
 
@@ -59,15 +63,19 @@ export default function TeaBlackGrid() {
                 <span className="text-[#FFD700] font-semibold">
                   {t.priceEUR ? `€${t.priceEUR.toFixed(2)}` : ""}
                 </span>
+
                 <button
                   onClick={() =>
-                    add({
-                      id: `tea:${t.slug}`,
-                      title: t.title,
-                      price: t.priceEUR ?? 0,
-                      image: t.img,
-                      qty: 1,
-                    })
+                    add(
+                      {
+                        id: `tea:${t.slug}`,
+                        title: t.title,
+                        priceNumber: t.priceEUR ?? 0,
+                        img: t.img,
+                        meta: t.subtitle,
+                      },
+                      1
+                    )
                   }
                   className="rounded-full px-4 py-2 bg-[#D4AF37] text-black text-sm font-semibold hover:brightness-110"
                 >
