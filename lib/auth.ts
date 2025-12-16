@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
-  // Use JWT sessions
   session: {
     strategy: "jwt",
   },
@@ -22,25 +21,19 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Find user in DB
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
 
-        if (!user || !user.password) {
-          return null;
-        }
+        if (!user || !user.password) return null;
 
         const isValid = await bcrypt.compare(
           credentials.password,
           user.password
         );
 
-        if (!isValid) {
-          return null;
-        }
+        if (!isValid) return null;
 
-        // This object is what goes into the JWT
         return {
           id: user.id,
           name: user.name ?? undefined,
@@ -55,7 +48,6 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    // Put user data into the JWT
     async jwt({ token, user }) {
       if (user) {
         token.id = (user as any).id;
@@ -65,7 +57,6 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
-    // Put data from JWT into session (what useSession() sees)
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id;
